@@ -5,11 +5,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const stylesHandler = MiniCssExtractPlugin.loader;
 
-
 const config = {
-  context: path.join(__dirname, '/src'),
   entry: {
-    main: './App.js'
+    main: './src/App.js'
   },
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   output: {
@@ -19,13 +17,16 @@ const config = {
   },
   devServer: {
     open: true,
+    static: {
+      directory: path.join(__dirname, './src/assets'),
+    },
     host: 'localhost',
     hot: true,
   },
-  plugins: [new MiniCssExtractPlugin(), ...['index'].map((file) => (
+  plugins: [new MiniCssExtractPlugin(), ...['index', 'first', 'second'].map((file) => (
     new HtmlWebpackPlugin({
       inject: 'head',
-      template: `./pages/${file}.html`,
+      template: `./src/pages/${file}.pug`,
       filename: `${file}.html`,
     })
   ))],
@@ -50,6 +51,15 @@ const config = {
       {
         test: /\.(html)$/,
         use: ['html-loader'],
+      },
+      {
+        test: /\.pug$/,
+        use: {
+          loader: 'pug-loader',
+          options: {
+            pretty: true,
+          },
+        },
       },
       {
         test: /\.(png|jpe?g|gif|svg|webp|ico|avif|mp3)$/i,
