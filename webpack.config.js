@@ -1,9 +1,16 @@
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 
 const stylesHandler = MiniCssExtractPlugin.loader;
+
+const pages = fs.readdirSync('./src/pages').map((page) => {
+  const index = page.lastIndexOf('.');
+  const strPage = page;
+  return strPage.slice(0, index);
+});
 
 const config = {
   entry: {
@@ -23,7 +30,7 @@ const config = {
     host: 'localhost',
     hot: true,
   },
-  plugins: [new MiniCssExtractPlugin(), ...['index', 'first', 'second'].map((file) => (
+  plugins: [new MiniCssExtractPlugin(), ...pages.map((file) => (
     new HtmlWebpackPlugin({
       inject: 'head',
       template: `./src/pages/${file}.pug`,
