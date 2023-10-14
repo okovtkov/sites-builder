@@ -1,5 +1,5 @@
 {
-  "name": "my-webpack-project",
+  "name": "sites-builder",
   "version": "1.0.0",
   "description": "My webpack project",
   "main": "index.js",
@@ -13,6 +13,9 @@
   },
   "author": "vasilich99",
   "license": "ISC",
+  "bin": {
+    "myapp": "./cli.js"
+  },
   "devDependencies": {
     "@babel/core": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
