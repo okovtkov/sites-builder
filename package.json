@@ -1,6 +1,6 @@
 {
   "name": "sites-builder",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "vasilich99",
   "license": "ISC",
   "bin": {
-    "myapp": "./cli.js"
+    "builder": "./webpack.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
