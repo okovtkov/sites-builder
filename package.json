@@ -8,11 +8,11 @@
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
-    "deploy": "npx gh-pages -b build -d ./dist",
+    "deploy": "gh-pages -b build -d ./dist",
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },
-  "author": "vasilich99",
+  "author": "okovtkov",
   "license": "ISC",
   "bin": {
     "builder": "./webpack.config.js"
