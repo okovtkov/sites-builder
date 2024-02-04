@@ -8,6 +8,9 @@ on:
       - reopened
       - closed
 
+env:
+  BRANCH_NAME: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,14 +30,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build project
         run: npm run build
-      - name: Run deploy
-        run: npx gh-pages --branch build --dist ./dist
-      - name: github-ref
-        run: echo ${{ github.ref }}
-      - name: github-ref-name-env
-        run: echo ${{ env.GITHUB_REF_NAME }}
-      - name: github-ref-name
-        run: echo $GITHUB_REF_NAME
+      - name: Run deploychik
+        run: |
+          npx gh-pages \
+          --branch build \
+          --dist ./dist \
+          --dest ./$BRANCH_NAME \
+          --user "olek <oleg@gmail.kek>"
       - name: Send comment to pull request
         uses: thollander/actions-comment-pull-request@v2
         with:
