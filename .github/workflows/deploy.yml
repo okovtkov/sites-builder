@@ -28,7 +28,13 @@ jobs:
       - name: Build project
         run: npm run build
       - name: Run deploy
-        run: npx gh-pages -b build -d ./dist
+        run: npx gh-pages --branch build --dist ./dist
+      - name: github-ref
+        run: echo ${{ github.ref }}
+      - name: github-ref-name-env
+        run: echo ${{ env.GITHUB_REF_NAME }}
+      - name: github-ref-name
+        run: echo $GITHUB_REF_NAME
       - name: Send comment to pull request
         uses: thollander/actions-comment-pull-request@v2
         with:
