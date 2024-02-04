@@ -1,9 +1,12 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
 
 jobs:
   deploy:
@@ -25,4 +28,10 @@ jobs:
       - name: Build project
         run: npm run build
       - name: Run deploy
-        run: npm run deploy
+        run: npx gh-pages -b build -d ./dist
+      - name: Send comment to pull request
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :rocket: Деплой данной ветки можно посмотреть [здесь](${{ 'https://github.com/okovtkov/sites-builder' }})
+          comment_includes: ":rocket:"
