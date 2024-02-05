@@ -33,6 +33,7 @@ jobs:
       - name: Run deploychik
         run: |
           npx gh-pages \
+          --remove ./$BRANCH_NAME \
           --branch build \
           --dist ./dist \
           --dest ./$BRANCH_NAME \
