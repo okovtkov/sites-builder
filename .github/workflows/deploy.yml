@@ -43,4 +43,5 @@ jobs:
         with:
           message: |
             :rocket: Деплой данной ветки можно посмотреть [здесь](${{ 'https://github.com/okovtkov/sites-builder' }})
-          comment_includes: ":rocket:"
+          comment_tag: execution
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
