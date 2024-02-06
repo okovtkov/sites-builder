@@ -66,4 +66,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Remove folder
         run: |
-          npx gh-pages --remove ./$BRANCH_NAME --user "olek <oleg@gmail.kek>"
+          npx gh-pages --remove ./$BRANCH_NAME --user "olek <oleg@gmail.kek>" --dist .
