@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     steps:
-      - name: Checkout repository
+      - name: Checkout repositorys
         uses: actions/checkout@v3
       - name: Remove folder from sorybook branch
         run: |
