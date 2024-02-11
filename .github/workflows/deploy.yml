@@ -47,6 +47,7 @@ jobs:
           --dest ./${{ env.BRANCH_NAME }} \
           --user "olek <oleg@gmail.kek>"
       - name: Send comment to pull request
+        if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
