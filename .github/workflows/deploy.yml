@@ -4,12 +4,22 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
+
+env:
+  BRANCH_NAME: ${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.action != 'closed'
     steps:
-      - name: Checkout repository
+      - name: Checkout repository # получаем весь код
         uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v4
@@ -17,12 +27,50 @@ jobs:
           node-version: 20.x
       - name: Install dependencies
         run: npm ci
-      - name: Set url
+      - name: Set url # рассказываем гиту с каким репозиторием работаем
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build project
         run: npm run build
-      - name: Run deploy
-        run: npm run deploy
+      - name: Run deploychik
+        # --branch - переходим на ветку build,
+        # --remove - удаляем прошлую директорию с названием текущей ветки
+        # --dist - добавляем содержимое папки ./dist в ветку которую указываем с флагом --dest
+        # --user - указываем кодера, из-за которого навернется прод
+        run: |
+          npx gh-pages \
+          --branch build \
+          --remove ./${{ env.BRANCH_NAME }} \
+          --dist ./dist \
+          --dest ./${{ env.BRANCH_NAME }} \
+          --user "olek <oleg@gmail.kek>"
+      - name: Send comment to pull request
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            :rocket: Деплой данной ветки можно посмотреть [здесь](https://okovtkov.github.io/sites-builder/${{env.BRANCH_NAME}})
+          comment_tag: execution
+
+  remove-deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Remove folder from sorybook branch
+        # устанавливаем все настройки гита. Ник, почту, подключаемся в репозиторию
+        # стягиваем все изменения с build ветки и переключаемся на нее
+        # удаляем папку с названием текущей ветки из build ветки. Коммитим. Пушим изменение
+        run: |
+          git remote set-url origin origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git config --global user.email "olek"
+          git config --global user.name "oleg@gmail.kek"
+          git fetch origin build
+          git checkout build
+          git rm -r ${{ github.head_ref }}
+          git commit -a -n -m "remove ${{ github.head_ref }}"
+          git push origin build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
