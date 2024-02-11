@@ -1,6 +1,9 @@
 name: Deploy
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     types:
       - opened
@@ -14,7 +17,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event.action != 'closed'
     steps:
       - name: Checkout repository # получаем весь код
         uses: actions/checkout@v3
