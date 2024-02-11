@@ -43,9 +43,8 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            :rocket: Деплой данной ветки можно посмотреть [здесь](${{ 'https://github.com/okovtkov/sites-builder' }})
+            :rocket: Деплой данной ветки можно посмотреть [здесь](https://okovtkov.github.io/sites-builder/${{env.BRANCH_NAME}})
           comment_tag: execution
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   remove-deploy:
     runs-on: ubuntu-latest
@@ -55,7 +54,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Remove folder from sorybook branch
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git remote set-url origin https://<ваше-имя-пользователя>.github.io/<название-репозитория>/feature-branch/
           git config --global user.email "olek"
           git config --global user.name "oleg@gmail.kek"
           git fetch origin build
